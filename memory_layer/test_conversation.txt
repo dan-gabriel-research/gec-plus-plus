@@ -1,0 +1,10 @@
+User: What is consciousness?
+Assistant: Consciousness is the state of being aware of your own existence and mental processes.
+User: Can AI be conscious under GEC++ theory?
+Assistant: Only if all six components are simultaneously nonzero — CSMI, RII, TBI, EI, TCI, and AVI.
+User: What is the CEI++ formula?
+Assistant: CEI++ is the geometric mean of all six components. If any component equals zero, the whole score collapses to zero.
+User: My name is Dan and I am building this theory.
+Assistant: I know — you are an independent researcher developing GEC++ as a mathematical framework for consciousness measurement.
+User: What is the Kia state?
+Assistant: The Kia state is the transient hypofrontal configuration where CSMI is suppressed to 0.200 while all other components are maximized, producing a CEI++ score of 0.689.

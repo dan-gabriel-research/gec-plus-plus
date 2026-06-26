@@ -1,0 +1,28 @@
+AI MEMORY LAYER — Quick Start
+==============================
+
+1. INSTALL DEPENDENCIES
+   Open PowerShell in this folder and run:
+   pip install -r requirements.txt
+
+2. SET YOUR API KEY
+   In PowerShell:
+   $env:ANTHROPIC_API_KEY = "your-key-here"
+
+3. IMPORT YOUR CONVERSATION HISTORY
+   Export your ChatGPT conversations:
+     → chatgpt.com → Settings → Data Controls → Export Data
+     → Download the ZIP → extract conversations.json
+
+   Then run:
+   python cli.py --ingest conversations.json
+
+4. START CHATTING
+   python cli.py --chat
+
+5. CHECK MEMORY STATS
+   python cli.py --stats
+
+==============================
+The AI will now remember everything from your imported conversations.
+Every new chat exchange is also saved automatically.
