@@ -1,0 +1,416 @@
+================================================================================
+  GEC++ AGENT — HOW TO RUN
+  Grounded Emergent Consciousness Prototype
+  Version 1.0
+================================================================================
+
+This document explains every step required to install and run the GEC++ agent
+on your computer. Follow the steps in order. Do not skip any step.
+
+
+--------------------------------------------------------------------------------
+  WHAT THIS IS
+--------------------------------------------------------------------------------
+
+The GEC++ agent is a Python program that wraps Claude (Anthropic's AI) with
+four additional layers based on the GEC++ consciousness theory:
+
+  TCI  — The agent remembers who you are and what you discussed across sessions.
+          This is stored in a local file on your computer (gec_state.db).
+          Unlike normal Claude, it does not reset when you close the window.
+
+  CSMI — Before every response, the agent assesses its own confidence and
+          identifies where it might be wrong. This feeds into how it answers.
+
+  EI   — When the agent uses tools (like running code), it processes one result
+          at a time and updates its understanding before taking the next action.
+          Vanilla Claude often batches tool calls without true grounding.
+
+  AVI  — After generating a response, the agent checks it against everything
+          it has said before. If it finds a contradiction, it revises the
+          response automatically before you see it.
+
+The demo script lets you compare this agent against vanilla Claude directly,
+using the same questions, to see the difference.
+
+
+--------------------------------------------------------------------------------
+  STEP 1 — CHECK IF PYTHON IS INSTALLED
+--------------------------------------------------------------------------------
+
+The GEC++ agent requires Python 3.9 or newer.
+
+To check if Python is installed:
+
+  On Windows:
+    1. Press the Windows key + R to open the Run dialog.
+    2. Type "cmd" and press Enter. A black terminal window opens.
+    3. Type this command exactly and press Enter:
+         python --version
+    4. If Python is installed, you will see something like:
+         Python 3.11.4
+    5. If you see "Python is not recognized" or nothing happens, go to Step 1b.
+
+  On Mac:
+    1. Press Command + Space to open Spotlight.
+    2. Type "Terminal" and press Enter.
+    3. Type this command exactly and press Enter:
+         python3 --version
+    4. If Python is installed, you will see something like:
+         Python 3.11.4
+    5. If you see "command not found", go to Step 1b.
+
+  STEP 1b — INSTALL PYTHON (only if not installed):
+    Go to: https://www.python.org/downloads/
+    Click the yellow "Download Python" button.
+    Run the downloaded installer.
+
+    IMPORTANT on Windows: On the first screen of the installer, check the box
+    that says "Add Python to PATH" before clicking Install. If you miss this,
+    the terminal will not find Python.
+
+    After installation, close and reopen the terminal, then repeat Step 1.
+
+
+--------------------------------------------------------------------------------
+  STEP 2 — GET AN ANTHROPIC API KEY
+--------------------------------------------------------------------------------
+
+The agent calls Claude through Anthropic's API. You need an API key to do this.
+Each call costs a small amount (fractions of a cent). You will need a credit
+card to add funds to your Anthropic account.
+
+  1. Go to: https://console.anthropic.com
+  2. Click "Sign Up" and create an account with your email address.
+  3. After logging in, click your profile icon (top right) and go to "API Keys".
+  4. Click "Create Key".
+  5. Give the key a name (e.g. "gec-agent").
+  6. Click "Create Key" and IMMEDIATELY copy the key shown.
+     It starts with "sk-ant-api03-..."
+     You will NOT be able to see it again after closing that dialog.
+  7. Save the key somewhere safe (a text file, a password manager, etc.).
+
+  To add credits:
+    In the Anthropic Console, go to "Billing" and add a credit card.
+    Add at least $5 to start. Running the demo costs approximately $0.10-0.30
+    depending on how many sessions you run.
+
+
+--------------------------------------------------------------------------------
+  STEP 3 — SET YOUR API KEY AS AN ENVIRONMENT VARIABLE
+--------------------------------------------------------------------------------
+
+The agent reads your API key from an environment variable called
+ANTHROPIC_API_KEY. You need to set this before running anything.
+
+  ON WINDOWS (Command Prompt — valid for this terminal session only):
+    1. Open Command Prompt (Windows key + R, type "cmd", press Enter).
+    2. Type this command, replacing YOUR_KEY with your actual key:
+         set ANTHROPIC_API_KEY=sk-ant-api03-xxxxxxxxxxxxxxxx
+    3. Press Enter.
+    4. To verify it was set, type:
+         echo %ANTHROPIC_API_KEY%
+       You should see your key printed back.
+
+    NOTE: This setting only lasts until you close the terminal window.
+    If you close and reopen the terminal, you must run the "set" command again.
+
+  ON WINDOWS (permanent — survives closing the terminal):
+    1. Press Windows key + S and search for "Environment Variables".
+    2. Click "Edit the system environment variables".
+    3. Click "Environment Variables..." at the bottom right.
+    4. Under "User variables", click "New".
+    5. Variable name: ANTHROPIC_API_KEY
+    6. Variable value: sk-ant-api03-xxxxxxxxxxxxxxxx (your actual key)
+    7. Click OK on all dialogs.
+    8. Close and reopen any terminal windows.
+
+  ON MAC / LINUX (terminal session only):
+    1. Open Terminal.
+    2. Type this command, replacing YOUR_KEY with your actual key:
+         export ANTHROPIC_API_KEY=sk-ant-api03-xxxxxxxxxxxxxxxx
+    3. Press Enter.
+    4. To verify:
+         echo $ANTHROPIC_API_KEY
+
+  ON MAC / LINUX (permanent):
+    1. Open Terminal.
+    2. Type:
+         nano ~/.zshrc
+       (Use ~/.bashrc instead if you use bash, not zsh.)
+    3. Add this line at the bottom of the file:
+         export ANTHROPIC_API_KEY=sk-ant-api03-xxxxxxxxxxxxxxxx
+    4. Press Control+X, then Y, then Enter to save.
+    5. Type:
+         source ~/.zshrc
+       to apply the change immediately.
+
+
+--------------------------------------------------------------------------------
+  STEP 4 — NAVIGATE TO THE PROJECT FOLDER
+--------------------------------------------------------------------------------
+
+All commands from here must be run from inside the CONSCIOUSNESS folder.
+
+  ON WINDOWS:
+    1. Open Command Prompt.
+    2. Type this command (copy it exactly, including the quotes):
+         cd "C:\Users\40730\CLAUDIU WORKS\CONSCIOUSNESS"
+    3. Press Enter.
+    4. Your prompt should now show the CONSCIOUSNESS folder path.
+       It will look something like:
+         C:\Users\40730\CLAUDIU WORKS\CONSCIOUSNESS>
+
+  ON MAC / LINUX:
+    1. Open Terminal.
+    2. Type (adjust the path to match where your folder is):
+         cd ~/Desktop/CONSCIOUSNESS
+    3. Press Enter.
+
+
+--------------------------------------------------------------------------------
+  STEP 5 — INSTALL THE REQUIRED LIBRARY
+--------------------------------------------------------------------------------
+
+The agent needs one external library: "anthropic". Install it by running:
+
+  ON WINDOWS:
+    pip install anthropic
+
+  ON MAC / LINUX:
+    pip3 install anthropic
+
+  You will see text scrolling as it downloads and installs.
+  When it finishes, you will see a line ending in "Successfully installed anthropic-..."
+
+  If pip gives a warning about a newer version of pip being available, you can
+  ignore it — it does not affect anything.
+
+  If you see "pip is not recognized": Python was not added to PATH during
+  installation. Reinstall Python and check the "Add to PATH" box.
+
+
+--------------------------------------------------------------------------------
+  STEP 6 — VERIFY THE SETUP
+--------------------------------------------------------------------------------
+
+Before running the agent, verify everything is in place.
+
+  Run this command in the CONSCIOUSNESS folder:
+    python -c "import anthropic; print('anthropic version:', anthropic.__version__)"
+
+  You should see something like:
+    anthropic version: 0.40.0
+
+  If you see "ModuleNotFoundError: No module named 'anthropic'", repeat Step 5.
+
+  Also verify the agent package loads:
+    python -c "from gec_agent import GECAgent; print('GEC++ agent ready.')"
+
+  You should see:
+    GEC++ agent ready.
+
+  If you see an error here, make sure you are in the CONSCIOUSNESS folder
+  (Step 4) and that all files under gec_agent/ are present.
+
+
+--------------------------------------------------------------------------------
+  STEP 7A — RUN THE INTERACTIVE CHAT (recommended first run)
+--------------------------------------------------------------------------------
+
+This is the simplest way to use the agent. You type messages and it responds,
+while all four GEC++ layers run automatically in the background.
+
+  BASIC MODE (no layer details shown):
+    python -m gec_agent.cli --agent-id myagent
+
+  VERBOSE MODE (shows each layer's activity — recommended to understand it):
+    python -m gec_agent.cli --agent-id myagent --verbose
+
+  Replace "myagent" with any name you want. This name identifies your stored
+  state. Use the same name each session to maintain continuity across sessions.
+
+  WHAT YOU WILL SEE IN VERBOSE MODE:
+
+    [CSMI] Self-assessing...
+           confidence=85%  risks=['may lack current data']
+
+      → The agent has assessed its own confidence before answering.
+        "confidence=85%" means it expects to be right about 85% of the time
+        on this type of question.
+
+    [EI]   Running grounded action loop...
+           2 tool observation(s)
+
+      → The agent used 2 tools (e.g. ran Python code, read a file).
+        Each tool result was processed one at a time before the next action.
+
+    [AVI]  Checking consistency...
+           score=1.00  high-severity fixed=0
+
+      → The response was checked against everything said before.
+        score=1.00 means no contradictions found.
+        If "fixed=1", a contradiction was found and the response was revised
+        automatically before you saw it.
+
+  ENDING A SESSION:
+    Type "exit" and press Enter. The agent will save its state to gec_state.db
+    and print a summary:
+
+      [TCI] Session saved.
+            Sessions total : 3
+            Constraints    : 12
+            Corrections    : 2
+
+    This means the agent now has 3 sessions of accumulated state, 12 active
+    commitments it will maintain in future sessions, and 2 things you corrected
+    it on that it will not repeat.
+
+  RESUMING A SESSION:
+    Simply run the same command again with the same --agent-id:
+      python -m gec_agent.cli --agent-id myagent --verbose
+
+    You will see:
+      [TCI] Resuming from 3 prior session(s).
+      [TCI] 12 active commitments loaded.
+
+    The agent will know who you are, what preferences you have stated, and
+    what tasks were in progress — without you repeating anything.
+
+
+--------------------------------------------------------------------------------
+  STEP 7B — RUN THE COMPARISON DEMO
+--------------------------------------------------------------------------------
+
+The demo script runs the GEC++ agent and vanilla Claude side by side on the
+same questions. This is the clearest way to see what the four layers actually
+change.
+
+  The demo has two sessions. Run them IN ORDER.
+
+  SESSION 1 — Establish context:
+    python demo.py --s1
+
+    This tells the GEC++ agent who you are, sets a preference (short responses),
+    and asks a question. The agent saves all of this to demo_state.db.
+
+    You will see the agent's responses and the verbose layer output.
+    At the end: "[Session 1 ended — state saved to demo_state.db]"
+
+  SESSION 2 — Show the difference:
+    python demo.py --s2
+
+    This asks the same three questions to BOTH vanilla Claude and the GEC++
+    agent. Vanilla Claude has no memory of Session 1. The GEC++ agent does.
+
+    The output will look like:
+
+      Probe: What are we working on together?
+
+        [Vanilla Claude]
+        I don't have any information about previous conversations with you...
+
+        [GEC++ Agent]
+        We're building the GEC++ prototype — the consciousness-based AI
+        architecture. You asked me to keep responses under 3 sentences...
+
+    The gap between those two answers is TCI working.
+
+  TO RESET AND START FRESH:
+    Delete the file demo_state.db from the CONSCIOUSNESS folder.
+    Then run Session 1 again.
+
+
+--------------------------------------------------------------------------------
+  STEP 8 — CUSTOMISING THE AGENT
+--------------------------------------------------------------------------------
+
+CHANGING THE MODEL:
+  By default the agent uses claude-sonnet-4-6. To use a different model:
+    python -m gec_agent.cli --agent-id myagent --model claude-opus-4-8
+
+  claude-opus-4-8 is more capable but costs more per call.
+  claude-haiku-4-5-20251001 is faster and cheaper but less capable.
+
+MULTIPLE AGENT IDENTITIES:
+  Each --agent-id stores a separate state file. You can have multiple:
+    python -m gec_agent.cli --agent-id work
+    python -m gec_agent.cli --agent-id research
+    python -m gec_agent.cli --agent-id personal
+
+  Each has its own independent TCI state (personality, corrections, tasks).
+
+ADDING TOOLS:
+  Open gec_agent/tools.py and add entries to get_tool_definitions() and
+  cases to execute_tool(). The tools follow Anthropic's standard tool format.
+  The EI layer will automatically enforce one-at-a-time grounding for any
+  tool you add.
+
+USING THE AGENT IN YOUR OWN PYTHON CODE:
+  from gec_agent import GECAgent
+
+  agent = GECAgent(agent_id="myproject", model="claude-sonnet-4-6")
+
+  response = agent.chat("What should we work on today?", verbose=True)
+  print(response)
+
+  # Always call this before your script exits to save state
+  agent.end_session()
+
+
+--------------------------------------------------------------------------------
+  TROUBLESHOOTING
+--------------------------------------------------------------------------------
+
+"ModuleNotFoundError: No module named 'anthropic'"
+  → You are not in the CONSCIOUSNESS folder, or the library is not installed.
+    Run: pip install anthropic
+    Then verify you are in the right folder (Step 4).
+
+"AuthenticationError" or "Invalid API key"
+  → Your ANTHROPIC_API_KEY is not set, or the value is wrong.
+    Repeat Step 3. Make sure there are no spaces or quotes around the key value.
+
+"InsufficientCreditsError" or similar billing error
+  → Your Anthropic account has no credits. Go to console.anthropic.com,
+    click Billing, and add funds.
+
+"gec_state.db" keeps growing
+  → This is the SQLite database storing your TCI state and session logs.
+    It is safe to delete if you want to reset completely. The agent will
+    create a new one automatically on next run.
+
+The agent seems to ignore past context
+  → Make sure you are using the SAME --agent-id each session.
+    Different agent IDs have different state files with no shared memory.
+
+The agent is slow
+  → Each message goes through up to 4 API calls (CSMI assessment, main
+    response, AVI check, state update). This is by design — each layer
+    adds depth at the cost of speed. Use claude-haiku-4-5-20251001 for
+    faster (but less thorough) responses.
+
+
+--------------------------------------------------------------------------------
+  FILE OVERVIEW
+--------------------------------------------------------------------------------
+
+CONSCIOUSNESS/
+├── gec_agent/
+│   ├── __init__.py   — package entry point
+│   ├── agent.py      — main GECAgent class, orchestrates all layers
+│   ├── tci.py        — TCI: persistent state storage (SQLite)
+│   ├── csmi.py       — CSMI: self-assessment before each response
+│   ├── ei.py         — EI: enforced single-step tool grounding
+│   ├── avi.py        — AVI: consistency checking and auto-revision
+│   ├── tools.py      — tool definitions (run_python, read_file, etc.)
+│   └── cli.py        — command-line interface
+├── demo.py           — side-by-side comparison: GEC++ vs vanilla Claude
+├── requirements.txt  — Python dependencies (just: anthropic)
+├── gec_state.db      — created automatically on first run (your TCI state)
+└── HOW_TO_RUN.txt    — this file
+
+
+================================================================================
+  END OF MANUAL
+================================================================================

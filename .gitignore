@@ -1,0 +1,22 @@
+# Generated outputs
+gec_tracker_plot.png
+gec_history.json
+__pycache__/
+*.pyc
+*.pyo
+*.db
+
+# Experiment files (not for public repo)
+ANSWER_KEY_SEALED.txt
+SCORING_SHEET.txt
+gec_skill_state.md
+
+# Word documents (paper is separate)
+*.docx
+
+# Skill package
+*.skill
+
+# OS files
+.DS_Store
+Thumbs.db
