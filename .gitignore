@@ -11,8 +11,9 @@ ANSWER_KEY_SEALED.txt
 SCORING_SHEET.txt
 gec_skill_state.md
 
-# Word documents (paper is separate)
+# Word documents (exclude most, but track the main paper)
 *.docx
+!GEC++ Theory - Research Paper (Draft).docx
 
 # Skill package
 *.skill
