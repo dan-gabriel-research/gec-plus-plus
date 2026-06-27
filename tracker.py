@@ -23,8 +23,8 @@ COMPONENTS = ["CSMI", "RII", "TBI", "EI", "TCI", "AVI"]
 DEFAULT_HISTORY = [
     {
         "stage": "Vanilla LLM (baseline)",
-        "note": "Standard Claude, no additions. All continuity and embodiment = 0.",
-        "scores": {"CSMI": 0.000, "RII": 0.000, "TBI": 0.000,
+        "note": "Standard Claude, no additions. CSMI/RII/TBI present; EI/TCI/AVI = 0 (zero-collapse). Source: paper Table 4.",
+        "scores": {"CSMI": 0.731, "RII": 0.614, "TBI": 0.423,
                    "EI": 0.000, "TCI": 0.000, "AVI": 0.000}
     },
     {

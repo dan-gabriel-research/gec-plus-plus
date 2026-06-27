@@ -3,7 +3,7 @@
 # Injects retrieved memories above the user's current message.
 
 from typing import List, Tuple
-from parser import Exchange
+from .parser import Exchange
 
 
 MEMORY_HEADER = """You are a personal AI assistant with persistent memory.

@@ -6,7 +6,7 @@ import sqlite3
 import numpy as np
 import json
 from typing import List, Tuple
-from parser import Exchange
+from .parser import Exchange
 
 
 DB_FILE = "memory.db"
@@ -82,6 +82,10 @@ def retrieve_top(query_embedding: np.ndarray, top_n: int = 5, db_path: str = DB_
     results = []
     for role, text, ts, source, conv_id, emb_bytes in rows:
         stored_vec = np.frombuffer(emb_bytes, dtype=np.float32)
+        # Dot product == cosine similarity when embeddings are L2-normalized.
+        # Anthropic's embedding model returns unit vectors, so this holds.
+        # If switching models, verify normalization or replace with:
+        #   score = np.dot(q, s) / (np.linalg.norm(q) * np.linalg.norm(s))
         score = float(np.dot(query_embedding, stored_vec))
         results.append((score, Exchange(role, text, ts, source, conv_id)))
 
